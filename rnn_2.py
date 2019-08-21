@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Practicing Building an LSTM Recurrent Neural Network To Predict Google Stock Price Data
+Spyder Editor
+
+This is a temporary script file.
 """
 
 #Recurrent
@@ -18,12 +20,12 @@ import pandas as pd
 
 # Import the training set (only numpy arrays can be the input)
 
-dataset_train = pd.read_csv("C:\\Users\\jj5jxt\\Desktop\\december\\euler\\udemy_lstm_nn\\Google_Stock_Price_Train.csv")
+dataset_train = pd.read_csv("Google_Stock_Price_Train.csv")
 training_set = dataset_train.iloc[:,1:2].values #gives numpy array of one columns rather than a simple vector
 
 
 
-# Feature Scaling (choosing normalization over standardisation because there is a sigmoid function as activation function)
+# Feature Scaling (choose normalization over standardisation because there is a sigmoid function as activation function)
 
 from sklearn.preprocessing import MinMaxScaler
 sc = MinMaxScaler(feature_range = (0 , 1))
@@ -33,15 +35,13 @@ training_set_scaled = sc.fit_transform(training_set) #fit gets the min and max a
 # Create a data structure with 60 timesteps and 1 output
 
 X_train = []   # input , for each observation (financial day) contains the 60 previous stock prices before that financial day
-Y_train	= []   # stock price for the next financial day
-
-i = 60
+y_train	= []   # stock price for the next financial day
 
 for i in range(60, len(training_set_scaled)):
 	X_train.append(training_set_scaled[i-60:i, 0])
-	Y_train.append(training_set_scaled[i , 0])
+	y_train.append(training_set_scaled[i , 0])
 
-X_train , Y_train  = np.array(X_train), np.array(Y_train) #1198 x 60 for X_train, first line is time = 60, each column are previous 59 values leading up to that day
+X_train , y_train  = np.array(X_train), np.array(y_train) #1198 x 60 for X_train, first line is time = 60, each column are previous 59 values leading up to that day
 
 # Reshaping
 
@@ -100,7 +100,7 @@ regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')  #Adam optimi
 
 # Fit the network to training data
 
-regressor.fit(X_train, y_train, epochs = 100, batch_size = 32) #choose epochs value where yo
+regressor.fit(X_train, y_train, epochs = 100, batch_size = 32) #choose epochs value where you observe convergence of the loss
 
 
 # -------------------   Part 3 - Predict and Visualize   ---------------------
